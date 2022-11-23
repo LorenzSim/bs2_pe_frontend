@@ -1,14 +1,18 @@
-FROM node:latest AS build
-WORKDIR /build
+# Fetching the latest node image on apline linux
+FROM node:alpine AS development
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
-RUN npm ci
+# Declaring env
+ENV NODE_ENV development
 
-COPY public/ public
-COPY src/ src
-RUN npm run build
+# Setting up the work directory
+WORKDIR /react-app
 
-FROM httpd:alpine
-WORKDIR /var/www/html
-COPY --from=build /build/build/ .
+# Installing dependencies
+COPY ./package.json /react-app
+RUN npm install
+
+# Copying all the files in our project
+COPY . .
+
+# Starting our application
+CMD npm start
