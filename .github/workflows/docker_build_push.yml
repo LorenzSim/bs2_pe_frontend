@@ -27,5 +27,11 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USER }}/bs_pe_front_end:latest
+      - name: Webhook
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          headers: '{"repository": "${{ secrets.DOCKERHUB_USER }}/bs_pe_front_end:latest"}'
+          body: '{"event": "deployment", "repository": "${{ secrets.DOCKERHUB_USER }}/bs_pe_front_end:latest"}'
 
 
