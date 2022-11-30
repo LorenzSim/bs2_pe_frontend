@@ -1,14 +1,21 @@
+# pull the base image
+FROM node:alpine
 
-FROM node:10-alpine as build-step
-
-RUN mkdir /app
-
+# set the working direction
 WORKDIR /app
 
-COPY package.json /app
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install app dependencies
+COPY package.json ./
+
+COPY package-lock.json ./
 
 RUN npm install
 
-COPY . /app
+# add app
+COPY . ./
 
-RUN npm run build
+# start app
+CMD ["npm", "start"]
